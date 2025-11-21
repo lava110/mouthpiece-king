@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>嘴替王者 v5.0</title>
+    <style>
+        /* --- 💎 极致极简风格 (Clean Style) --- */
+        :root {
+            --primary: #2563eb; --primary-soft: #eff6ff;
+            --text-main: #111827; --text-sub: #6b7280;
+            --border: #e5e7eb; --bg: #ffffff;
+            --surface: #ffffff; --danger-text: #dc2626;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+            background-color: #f9fafb; color: var(--text-main);
+            margin: 0; padding: 40px 20px; display: flex; justify-content: center;
+            min-height: 100vh; box-sizing: border-box;
+        }
+
+        .cockpit {
+            display: grid; grid-template-columns: 360px 1fr; gap: 40px;
+            max-width: 1200px; width: 100%; align-items: start;
+        }
+
+        @media (max-width: 800px) {
+            .cockpit { grid-template-columns: 1fr; gap: 20px; }
+            body { padding: 10px; }
+        }
+
+        /* 左侧 */
+        .panel-left { display: flex; flex-direction: column; gap: 30px; }
+
+        .brand-area h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; margin: 0; }
+        .app-slogan { font-size: 0.9rem; color: var(--primary); font-weight: 600; margin-top: 8px; }
+
+        .section-title { font-size: 0.75rem; font-weight: 700; color: var(--text-sub); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px; }
+
+        textarea {
+            width: 100%; height: 120px; padding: 16px;
+            background: #fff; border: 1px solid var(--border); border-radius: 12px;
+            font-size: 1rem; resize: none; box-sizing: border-box;
+            color: var(--danger-text); font-weight: 500;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05); transition: all 0.2s;
+        }
+        textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); }
+
+        .tag-group { display: flex; flex-wrap: wrap; gap: 8px; }
+        .tag {
+            padding: 8px 14px; border-radius: 8px; font-size: 0.85rem; cursor: pointer;
+            border: 1px solid var(--border); background: #fff; color: var(--text-main);
+            transition: all 0.15s ease; font-weight: 500;
+        }
+        .tag:hover { border-color: #d1d5db; background: #f9fafb; }
+        .tag.active { background: var(--text-main); color: #fff; border-color: var(--text-main); }
+        
+        .tag.custom-tag { border: 1px dashed #cbd5e1; color: var(--text-sub); }
+        .tag.custom-tag.active { border-style: solid; background: var(--primary); border-color: var(--primary); color: white; }
+
+        .slider-row { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+        .slider-label { font-size: 0.85rem; font-weight: 600; width: 60px; }
+        input[type=range] { flex: 1; accent-color: var(--text-main); cursor: pointer; height: 4px; }
+        .slider-val { font-size: 0.85rem; font-weight: 600; color: var(--text-sub); width: 40px; text-align: right; }
+
+        .forge-btn {
+            width: 100%; padding: 16px; margin-top: 10px;
+            background: var(--text-main); color: white; border: none; border-radius: 12px;
+            font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.2s;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .forge-btn:hover { background: #000; transform: translateY(-1px); }
+        .forge-btn:disabled { opacity: 0.6; cursor: wait; }
+
+        /* 右侧 */
+        .panel-right { display: flex; flex-direction: column; gap: 30px; min-width: 0; }
+
+        .result-container {
+            background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 40px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.03);
+            min-height: 200px; display: flex; flex-direction: column;
+        }
+        .speech-text {
+            font-size: 1.25rem; line-height: 1.8; color: var(--text-main);
+            white-space: pre-wrap; margin-bottom: 30px; font-weight: 500; word-wrap: break-word;
+        }
+        .placeholder { color: #e5e7eb; text-align: center; font-style: italic; margin: auto; }
+
+        .action-bar { display: flex; gap: 10px; justify-content: flex-end; border-top: 1px solid #f3f4f6; padding-top: 20px; flex-wrap: wrap; }
+        .ghost-btn {
+            padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; cursor: pointer;
+            background: transparent; border: 1px solid transparent; color: var(--text-sub);
+            transition: all 0.2s; font-weight: 500;
+        }
+        .ghost-btn:hover { background: #f3f4f6; color: var(--text-main); }
+
+        .insight-box {
+            background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 25px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+        }
+        .insight-title {
+            font-size: 0.8rem; font-weight: 700; color: var(--primary);
+            margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.05em;
+        }
+        .insight-content {
+            font-size: 0.9rem; line-height: 1.7; color: #4b5563;
+            background: #f8fafc; padding: 15px; border-radius: 8px;
+            border-left: 3px solid var(--primary);
+        }
+
+        .metrics-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-top: 20px; }
+        .metric-item { display: flex; flex-direction: column; gap: 5px; }
+        .metric-label { font-size: 0.75rem; color: var(--text-sub); }
+        .metric-bar-bg { height: 4px; background: #e5e7eb; border-radius: 2px; overflow: hidden; }
+        .metric-bar-fill { height: 100%; background: var(--text-main); width: 0%; transition: width 1s ease; }
+        
+        .log-list { margin-top: 10px; border-top: 1px solid var(--border); padding-top: 10px; max-height: 200px; overflow-y: auto; }
+        .log-item { padding: 8px 0; font-size: 0.85rem; color: var(--text-sub); border-bottom: 1px solid #f9fafb; cursor: pointer; display: flex; justify-content: space-between; }
+        .log-item:hover { color: var(--primary); }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.554.0"
+  }
+}
+</script>
+</head>
+<body>
+    <div id="root"></div>
+</body>
+</html>
